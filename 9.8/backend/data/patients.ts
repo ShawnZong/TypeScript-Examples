@@ -1,5 +1,7 @@
 import { Patient } from "../src/types";
-const patientData: Array<Patient> = [
+import { toNewPatientEntry } from "../src/utils";
+
+const srcPatientData = [
   {
     id: "d2773336-f723-11e9-8f0b-362b9e155667",
     name: "John McClane",
@@ -41,5 +43,10 @@ const patientData: Array<Patient> = [
     occupation: "Digital evangelist",
   },
 ];
+const patientData: Array<Patient> = srcPatientData.map((obj) => {
+  const newObj = toNewPatientEntry(obj) as Patient;
+  newObj.id = obj.id;
+  return newObj;
+});
 
 export default patientData;
