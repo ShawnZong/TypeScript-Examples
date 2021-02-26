@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "deploy": "npm run tsc && npm run start",
+    "start": "node build/src/index.js",
     "tsc": "tsc",
-    "dev": "ts-node-dev index.ts",
+    "dev": "ts-node-dev src/index.ts",
     "lint": "eslnt --ext .ts .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
