@@ -66,11 +66,14 @@ const PatientDetail: React.FC = () => {
 
         <p>ssn: {patient.ssn}</p>
         <p>occupation: {patient.occupation}</p>
-        <Header as="h3">entries</Header>
-
-        {patient.entries.map((entry) => (
-          <EntryDetail key={entry.id} entry={entry} />
-        ))}
+        <Header as="h3">Entries</Header>
+        {patient.entries.length === 0 ? (
+          <p>no entries</p>
+        ) : (
+          patient.entries.map((entry) => (
+            <EntryDetail key={entry.id} entry={entry} />
+          ))
+        )}
       </Container>
     </div>
   );
