@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState, useEffect } from "react";
 // types
-import { Patient } from "../types";
+import { Patient, Entry } from "../types";
 
 // interact with backend
 import axios from "axios";
@@ -11,7 +12,22 @@ import { useParams } from "react-router-dom";
 import { useStateValue, editPatientList } from "../state";
 
 // style
-import { Container, Header, Icon } from "semantic-ui-react";
+import { Container, Header, Icon, List } from "semantic-ui-react";
+
+const EntryDetail: React.FC<{ entry: Entry }> = ({ entry }) => {
+  return (
+    <div>
+      {`${entry.date} ${entry.description}`}
+      <List as="ul">
+        {entry.diagnosisCodes?.map((code) => (
+          <List.Item key={code} as="li">
+            {code}
+          </List.Item>
+        ))}
+      </List>
+    </div>
+  );
+};
 
 const PatientDetail: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -41,6 +57,7 @@ const PatientDetail: React.FC = () => {
   if (!patient) {
     return <div>no this patient</div>;
   }
+
   const GenderIcon = () => {
     if (patient.gender === "male") {
       return <Icon name="mars" />;
@@ -50,6 +67,9 @@ const PatientDetail: React.FC = () => {
       return <Icon name="genderless" />;
     }
   };
+
+  patient.entries.map((patient) => console.log("single: ", patient.date));
+  // console.log("patienr: ", patient.entries.map);
   return (
     <div>
       <Container>
@@ -57,9 +77,15 @@ const PatientDetail: React.FC = () => {
           {patient.name}
           {GenderIcon()}
         </Header>
+
+        <p>ssn: {patient.ssn}</p>
+        <p>occupation: {patient.occupation}</p>
+        <Header as="h3">entries</Header>
+
+        {patient.entries.map((entry) => (
+          <EntryDetail key={entry.id} entry={entry} />
+        ))}
       </Container>
-      <p>ssn: {patient.ssn}</p>
-      <p>occupation: {patient.occupation}</p>
     </div>
   );
 };
