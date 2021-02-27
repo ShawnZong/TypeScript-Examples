@@ -7,14 +7,15 @@ import { Patient, NewPatient } from "../types";
 // utils
 import { v1 as uuid } from "uuid";
 
-const getAllPatients = (): Omit<Patient, "ssn">[] => {
-  const tmpPatientData = patientData;
+const getAllPatients = (): Patient[] => {
+  return patientData;
+  // const tmpPatientData = patientData;
 
-  return tmpPatientData.map((patient) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { ssn, ...usefulData } = patient;
-    return usefulData;
-  });
+  // return tmpPatientData.map((patient) => {
+  //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //   // const { ssn, ...usefulData } = patient;
+  //   return usefulData;
+  // });
 };
 
 const findPatient = (searchID: string): Patient | undefined => {
