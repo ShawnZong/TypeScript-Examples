@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState, useEffect } from "react";
 // types
-import { Patient } from "../types";
+import { Entry, Patient } from "../types";
 
 // interact with backend
 import axios from "axios";
@@ -10,12 +10,15 @@ import { useParams } from "react-router-dom";
 
 // components
 import { EntryDetail } from "./EntryDetail";
+import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
+import AddPatientModal from "../AddEntryModal/index";
 
-// init patients
+// state
 import { useStateValue, editPatientList } from "../state";
+import { addEntry } from "../state/reducer";
 
 // style
-import { Container, Header, Icon } from "semantic-ui-react";
+import { Container, Header, Icon, Button } from "semantic-ui-react";
 
 const PatientDetail: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -23,6 +26,32 @@ const PatientDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const foundPatient = patients[id];
+
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+      console.log(newEntry);
+      dispatch(addEntry(id, newEntry));
+      // dispatch({ type: "ADD_PATIENT", payload: newPatient });
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
 
   useEffect(() => {
     setPatient(foundPatient);
@@ -66,6 +95,13 @@ const PatientDetail: React.FC = () => {
         <p>ssn: {patient.ssn}</p>
         <p>occupation: {patient.occupation}</p>
         <Header as="h3">Entries</Header>
+        <Button onClick={() => openModal()}>Add New Entry</Button>
+        <AddPatientModal
+          modalOpen={modalOpen}
+          onSubmit={submitNewEntry}
+          error={error}
+          onClose={closeModal}
+        />
         {patient.entries.length === 0 ? (
           <p>no entries</p>
         ) : (
