@@ -8,7 +8,6 @@ import {
   HealthCheckEntry,
   HospitalEntry,
   OccupationalHealthcareEntry,
-  HealthCheckRating,
 } from "../types";
 
 // style

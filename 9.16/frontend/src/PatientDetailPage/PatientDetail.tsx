@@ -23,8 +23,7 @@ const PatientDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const foundPatient = patients[id];
-  //   console.log(patients[id]);
-  //   console.log("found", foundPatient);
+
   useEffect(() => {
     setPatient(foundPatient);
     if (!foundPatient) {
