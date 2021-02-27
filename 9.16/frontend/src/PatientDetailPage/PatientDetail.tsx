@@ -19,7 +19,8 @@ const PatientDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
   const foundPatient = patients[id];
-  console.log("found", foundPatient);
+  //   console.log(patients[id]);
+  //   console.log("found", foundPatient);
   useEffect(() => {
     setPatient(foundPatient);
     if (!foundPatient) {
@@ -35,8 +36,8 @@ const PatientDetail: React.FC = () => {
       };
       fetchPatient();
     }
-  }, [id]);
-  console.log(patient);
+  }, [foundPatient]);
+  //   console.log(patient);
   if (!patient) {
     return <div>no this patient</div>;
   }

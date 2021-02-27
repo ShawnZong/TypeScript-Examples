@@ -1,13 +1,15 @@
 import React from "react";
 import axios from "axios";
 import { Container, Table, Button } from "semantic-ui-react";
-
+// components
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
-import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
-import { useStateValue } from "../state";
+
+// state
+import { apiBaseUrl } from "../constants";
+import { useStateValue, addPatient } from "../state";
 
 // router
 import { Link } from "react-router-dom";
@@ -31,7 +33,8 @@ const PatientListPage: React.FC = () => {
         `${apiBaseUrl}/patients`,
         values
       );
-      dispatch({ type: "ADD_PATIENT", payload: newPatient });
+      dispatch(addPatient(newPatient));
+      // dispatch({ type: "ADD_PATIENT", payload: newPatient });
       closeModal();
     } catch (e) {
       console.error(e.response.data);

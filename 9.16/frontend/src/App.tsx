@@ -1,12 +1,17 @@
 import React from "react";
 import axios from "axios";
+// types
+import { Patient } from "./types";
+
+// style
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Button, Divider, Header, Container } from "semantic-ui-react";
 
-import { apiBaseUrl } from "./constants";
-import { useStateValue } from "./state";
-import { Patient } from "./types";
+// state
+import { useStateValue, setPatientList } from "./state";
 
+// components
+import { apiBaseUrl } from "./constants";
 import PatientListPage from "./PatientListPage";
 import { PatientDetail } from "./PatientDetailPage/PatientDetail";
 
@@ -20,7 +25,8 @@ const App: React.FC = () => {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
         );
-        dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
+        dispatch(setPatientList(patientListFromApi));
+        // dispatch({ type: "SET_PATIENT_LIST", payload: patientListFromApi });
       } catch (e) {
         console.error(e);
       }
