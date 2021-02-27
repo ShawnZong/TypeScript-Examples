@@ -2,7 +2,7 @@
 import patientData from "../../data/patients";
 
 // type
-import { Patient, NewPatient } from "../types";
+import { Patient, NewPatient, Entry } from "../types";
 
 // utils
 import { v1 as uuid } from "uuid";
@@ -32,4 +32,13 @@ const addPatient = (input: NewPatient): Patient => {
   return newPatient;
 };
 
-export default { getAllPatients, addPatient, findPatient };
+const addEntry = (inputID: string, input: Omit<Entry, "id">): Entry => {
+  const index = patientData.findIndex((obj) => obj.id === inputID);
+  const newEntry = { id: uuid(), ...input } as Entry;
+
+  patientData[index].entries.push(newEntry);
+
+  return newEntry;
+};
+
+export default { getAllPatients, addPatient, findPatient, addEntry };
