@@ -8,7 +8,8 @@ import { TextField, DiagnosisSelection, NumberField } from "./FormField";
 // import * as yup from "yup";
 
 // types
-import { Diagnosis, HealthCheckRating } from "../types";
+import { Diagnose, HealthCheckRating } from "../types";
+import { isDate } from "../utils";
 
 // style
 import { Grid, Button } from "semantic-ui-react";
@@ -18,17 +19,33 @@ export type EntryFormValues = {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes: Diagnosis[];
+  diagnosisCodes: Diagnose[];
   healthCheckRating: HealthCheckRating;
 };
 
-// const entryFormSchema = {
-//   type: yup.string().required(),
-//   description: yup.string().required(),
-//   date: yup.string().required(),
-//   specialist: yup.string().required(),
-//   healthCheckRating: yup.number().required(),
-// };
+const validate = (values: EntryFormValues) => {
+  const requiredError = "Field is required";
+  const invalidFormatError = "Field is not in correct format";
+  const errors: { [field: string]: string } = {};
+
+  if (!values.type) {
+    errors.type = requiredError;
+  }
+  if (!values.description) {
+    errors.description = requiredError;
+  }
+  if (!values.date) {
+    errors.date = requiredError;
+  }
+  if (!isDate(values.date)) {
+    errors.date = invalidFormatError;
+  }
+  if (!values.specialist) {
+    errors.specialist = requiredError;
+  }
+
+  return errors;
+};
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -56,6 +73,9 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
+      validate={(values) => {
+        return validate(values);
+      }}
     >
       {({ handleSubmit, isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
@@ -65,11 +85,6 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               setFieldTouched={setFieldTouched}
               diagnoses={Object.values(diagnosis)}
             />
-            {/* <SelectField
-              label="Gender"
-              name="gender"
-              options={genderOptions}
-            /> */}
             <Field
               label="Type"
               placeholder="type"

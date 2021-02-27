@@ -1,4 +1,4 @@
-export interface Diagnosis {
+export interface Diagnose {
   code: string;
   name: string;
   latin?: string;
@@ -9,7 +9,7 @@ export interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<Diagnosis["code"]>;
+  diagnosisCodes?: Array<Diagnose["code"]>;
 }
 
 export enum HealthCheckRating {
@@ -24,7 +24,7 @@ export interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
   endDate: string;
 }
@@ -35,7 +35,7 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   sickLeave?: SickLeave;
 }
 
-interface Discharged {
+export interface Discharged {
   date: string;
   criteria: string;
 }
@@ -50,25 +50,28 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+// export type NewEntry = Omit<Entry, "id">;
+
 export enum Gender {
   Male = "male",
   Female = "female",
   Other = "other",
 }
-
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 
 export interface Patient {
   id: string;
   name: string;
-  occupation: string;
+  dateOfBirth: string;
+  ssn: string;
   gender: Gender;
-  ssn?: string;
-  dateOfBirth?: string;
+  occupation: string;
   entries: Entry[];
 }
 
 export type PublicPatient = Omit<Patient, "ssn" | "entries">;
+
+export type NewPatient = Omit<Patient, "id">;
 
 export const assertNever = (value: never): never => {
   throw new Error(

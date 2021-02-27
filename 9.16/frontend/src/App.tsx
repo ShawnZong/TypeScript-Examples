@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 // types
-import { Patient, Diagnosis } from "./types";
+import { Patient, Diagnose } from "./types";
 
 // style
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
@@ -34,7 +34,7 @@ const App: React.FC = () => {
 
     const fetchDiagnosistList = async () => {
       try {
-        const { data: diagnosisListFromApi } = await axios.get<Diagnosis[]>(
+        const { data: diagnosisListFromApi } = await axios.get<Diagnose[]>(
           `${apiBaseUrl}/diagnosis`
         );
         dispatch(setDiagnosisList(diagnosisListFromApi));
