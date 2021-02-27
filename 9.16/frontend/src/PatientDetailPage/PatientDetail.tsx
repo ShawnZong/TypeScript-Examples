@@ -1,33 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState, useEffect } from "react";
 // types
-import { Patient, Entry } from "../types";
+import { Patient } from "../types";
 
 // interact with backend
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { useParams } from "react-router-dom";
 
+// components
+import { EntryDetail } from "./EntryDetail";
+
 // init patients
 import { useStateValue, editPatientList } from "../state";
 
 // style
-import { Container, Header, Icon, List } from "semantic-ui-react";
-
-const EntryDetail: React.FC<{ entry: Entry }> = ({ entry }) => {
-  return (
-    <div>
-      {`${entry.date} ${entry.description}`}
-      <List as="ul">
-        {entry.diagnosisCodes?.map((code) => (
-          <List.Item key={code} as="li">
-            {code}
-          </List.Item>
-        ))}
-      </List>
-    </div>
-  );
-};
+import { Container, Header, Icon } from "semantic-ui-react";
 
 const PatientDetail: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -68,8 +56,6 @@ const PatientDetail: React.FC = () => {
     }
   };
 
-  patient.entries.map((patient) => console.log("single: ", patient.date));
-  // console.log("patienr: ", patient.entries.map);
   return (
     <div>
       <Container>
