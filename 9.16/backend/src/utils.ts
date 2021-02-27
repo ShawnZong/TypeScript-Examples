@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { NewPatient, Gender } from "./types";
+import { NewPatient, Gender, Entry } from "./types";
 
+const isArray = (input: any): input is Entry[] => {
+  return typeof input === "object";
+};
+const parseEntry = (input: any): Entry[] => {
+  if (!input || !isArray(input)) {
+    throw new Error("input wrong, not an array " + input);
+  }
+  return input;
+};
 const isString = (input: any): input is string => {
   return typeof input === "string" || input instanceof String;
 };
@@ -44,6 +53,7 @@ const toNewPatientEntry = (input: any): NewPatient => {
     ssn: parseString(input.ssn),
     gender: parseGender(input.gender),
     occupation: parseString(input.occupation),
+    entries: parseEntry(input.entries),
   };
 };
 

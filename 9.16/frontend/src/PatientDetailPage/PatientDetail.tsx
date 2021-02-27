@@ -36,7 +36,7 @@ const PatientDetail: React.FC = () => {
       };
       fetchPatient();
     }
-  }, [foundPatient]);
+  }, [foundPatient, dispatch, id]);
   //   console.log(patient);
   if (!patient) {
     return <div>no this patient</div>;

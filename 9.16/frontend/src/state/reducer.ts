@@ -15,7 +15,7 @@ export type Action =
       payload: Patient;
     };
 
-// action producer
+// action creators
 export const editPatientList = (patient: Patient): Action => {
   return {
     type: "EDIT_PATIENT_LIST",
