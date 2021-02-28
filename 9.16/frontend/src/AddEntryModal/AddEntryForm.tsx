@@ -4,11 +4,16 @@ import { useStateValue } from "../state";
 
 // components
 import { Field, Formik, Form } from "formik";
-import { TextField, DiagnosisSelection, NumberField } from "./FormField";
-// import * as yup from "yup";
+import {
+  TextField,
+  DiagnosisSelection,
+  TyperOption,
+  SelectField,
+} from "./FormField";
+import { TypeAdditionalField } from "./TypeAdditionalField";
 
 // types
-import { Diagnose, HealthCheckRating } from "../types";
+import { Diagnose, HealthCheckRating, SickLeave, Discharged } from "../types";
 import { isDate } from "../utils";
 
 // style
@@ -21,6 +26,9 @@ export type EntryFormValues = {
   specialist: string;
   diagnosisCodes: Diagnose[];
   healthCheckRating: HealthCheckRating;
+  employerName: string;
+  sickLeave: SickLeave;
+  discharge: Discharged;
 };
 
 const validate = (values: EntryFormValues) => {
@@ -52,25 +60,28 @@ interface Props {
   onCancel: () => void;
 }
 
-// const genderOptions: GenderOption[] = [
-//   { value: Gender.Male, label: "Male" },
-//   { value: Gender.Female, label: "Female" },
-//   { value: Gender.Other, label: "Other" }
-// ];
+const typeOptions: TyperOption[] = [
+  { value: "HealthCheck", label: "HealthCheck" },
+  { value: "OccupationalHealthcare", label: "OccupationalHealthcare" },
+  { value: "Hospital", label: "Hospital" },
+];
 
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnosis }] = useStateValue();
+  const [type, setType] = React.useState("HealthCheck");
 
   return (
     <Formik
-      // validationSchema={entryFormSchema}
       initialValues={{
-        type: "",
+        type: "HealthCheck",
         description: "",
         date: "",
         specialist: "",
         diagnosisCodes: [],
         healthCheckRating: 0,
+        employerName: "",
+        sickLeave: { startDate: "", endDate: "" },
+        discharge: { date: "", criteria: "" },
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -80,17 +91,18 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
       {({ handleSubmit, isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (
           <Form className="form ui" onSubmit={handleSubmit}>
-            <DiagnosisSelection
-              setFieldValue={setFieldValue}
-              setFieldTouched={setFieldTouched}
-              diagnoses={Object.values(diagnosis)}
+            <SelectField
+              label="Entry Type"
+              name="type"
+              options={typeOptions}
+              setValue={setType}
             />
-            <Field
+            {/* <Field
               label="Type"
               placeholder="type"
               name="type"
               component={TextField}
-            />
+            /> */}
             <Field
               label="Description"
               placeholder="description"
@@ -109,13 +121,12 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               name="specialist"
               component={TextField}
             />
-            <Field
-              label="healthCheckRating"
-              name="healthCheckRating"
-              component={NumberField}
-              min={0}
-              max={3}
+            <DiagnosisSelection
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              diagnoses={Object.values(diagnosis)}
             />
+            <TypeAdditionalField type={type} />
 
             <Grid>
               <Grid.Column floated="left" width={5}>
