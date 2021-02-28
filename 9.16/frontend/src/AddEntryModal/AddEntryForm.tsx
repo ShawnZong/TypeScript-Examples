@@ -53,7 +53,26 @@ const validate = (values: EntryFormValues) => {
   if (!values.specialist) {
     errors.specialist = requiredError;
   }
-
+  if (values.sickLeaveStartDate && !isDate(values.sickLeaveStartDate)) {
+    errors.sickLeaveStartDate = invalidFormatError;
+  }
+  if (values.sickLeaveEndDate && !isDate(values.sickLeaveEndDate)) {
+    errors.sickLeaveEndDate = invalidFormatError;
+  }
+  if (values.dischargeDate && !isDate(values.dischargeDate)) {
+    errors.dischargeDate = invalidFormatError;
+  }
+  // type: "OccupationalHealthcare",
+  // description: "df",
+  // date: "1999-01-01",
+  // specialist: "a",
+  // diagnosisCodes: [],
+  // healthCheckRating: 0,
+  // employerName: "s",
+  // sickLeaveStartDate: "1999-01-01",
+  // sickLeaveEndDate: "1999-01-01",
+  // dischargeDate: "1999-01-01",
+  // dischargeCrieria: "s",
   return errors;
 };
 
