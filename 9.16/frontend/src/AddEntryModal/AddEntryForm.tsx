@@ -13,7 +13,7 @@ import {
 import { TypeAdditionalField } from "./TypeAdditionalField";
 
 // types
-import { Diagnose, HealthCheckRating, SickLeave, Discharged } from "../types";
+import { Diagnose, HealthCheckRating } from "../types";
 import { isDate } from "../utils";
 
 // style
@@ -24,11 +24,13 @@ export type EntryFormValues = {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes: Diagnose[];
-  healthCheckRating: HealthCheckRating;
-  employerName: string;
-  sickLeave: SickLeave;
-  discharge: Discharged;
+  diagnosisCodes?: Diagnose[];
+  healthCheckRating?: HealthCheckRating;
+  employerName?: string;
+  sickLeaveStartDate?: string;
+  sickLeaveEndDate?: string;
+  dischargeDate?: string;
+  dischargeCrieria?: string;
 };
 
 const validate = (values: EntryFormValues) => {
@@ -68,20 +70,22 @@ const typeOptions: TyperOption[] = [
 
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnosis }] = useStateValue();
-  const [type, setType] = React.useState("HealthCheck");
+  const [type, setType] = React.useState("OccupationalHealthcare");
 
   return (
     <Formik
       initialValues={{
-        type: "HealthCheck",
-        description: "",
-        date: "",
-        specialist: "",
+        type: "OccupationalHealthcare",
+        description: "df",
+        date: "1999-01-01",
+        specialist: "a",
         diagnosisCodes: [],
         healthCheckRating: 0,
-        employerName: "",
-        sickLeave: { startDate: "", endDate: "" },
-        discharge: { date: "", criteria: "" },
+        employerName: "s",
+        sickLeaveStartDate: "1999-01-01",
+        sickLeaveEndDate: "1999-01-01",
+        dischargeDate: "1999-01-01",
+        dischargeCrieria: "s",
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -97,12 +101,6 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               options={typeOptions}
               setValue={setType}
             />
-            {/* <Field
-              label="Type"
-              placeholder="type"
-              name="type"
-              component={TextField}
-            /> */}
             <Field
               label="Description"
               placeholder="description"

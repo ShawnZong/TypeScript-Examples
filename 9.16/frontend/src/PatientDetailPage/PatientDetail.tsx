@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState, useEffect } from "react";
 // types
-import { Entry, Patient } from "../types";
+import { Entry, Patient, SickLeave, Discharged } from "../types";
 
 // interact with backend
 import axios from "axios";
@@ -37,8 +37,41 @@ const PatientDetail: React.FC = () => {
     setError(undefined);
   };
 
-  const submitNewEntry = async (values: EntryFormValues) => {
+  interface SubmitEntryFormValues extends EntryFormValues {
+    sickLeave?: SickLeave;
+    discharge?: Discharged;
+  }
+  const submitNewEntry = async (values: SubmitEntryFormValues) => {
     try {
+      switch (values.type) {
+        case "OccupationalHealthcare":
+          if (!values.sickLeaveStartDate) {
+            values.sickLeaveStartDate = "";
+          }
+          if (!values.sickLeaveEndDate) {
+            values.sickLeaveEndDate = "";
+          }
+          values.sickLeave = {
+            startDate: values.sickLeaveStartDate,
+            endDate: values.sickLeaveEndDate,
+          };
+          break;
+        case "Hospital":
+          if (!values.dischargeDate) {
+            values.dischargeDate = "";
+          }
+          if (!values.dischargeCrieria) {
+            values.dischargeCrieria = "";
+          }
+          values.discharge = {
+            date: values.dischargeDate,
+            criteria: values.dischargeCrieria,
+          };
+          break;
+
+        default:
+          throw new Error("invalid form data");
+      }
       const { data: newEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${id}/entries`,
         values
@@ -48,8 +81,7 @@ const PatientDetail: React.FC = () => {
       // dispatch({ type: "ADD_PATIENT", payload: newPatient });
       closeModal();
     } catch (e) {
-      console.error(e.response.data);
-      setError(e.response.data.error);
+      console.error(e);
     }
   };
 

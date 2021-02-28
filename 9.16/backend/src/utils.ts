@@ -83,7 +83,7 @@ const parseDiagnosisCodes = (input: string[]): string[] => {
 };
 
 const parseDischarge = (input: any): Discharged => {
-  if (!input || !isString(input.data) || !isString(input.criteria)) {
+  if (!input || !isString(input.date) || !isString(input.criteria)) {
     throw new Error("input wrong, not a  Discharged" + input);
   }
   return {
